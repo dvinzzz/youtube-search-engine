@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Search</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <h1>YouTube Video Search</h1>
+    
+    <!-- Search form for YouTube videos -->
+    <form id="search-form">
+        <input type="text" id="search-query" placeholder="Search YouTube videos..." required>
+        <input type="submit" value="Search">
+    </form>
+
+    <!-- Display search results -->
+    <div id="results"></div>
+
+    <!-- Display selected videos with clear selection and submit options -->
+    <div id="selected-videos">
+        <h2>Selected Videos</h2>
+        <div id="selected-list"></div>
+        <button id="clear-selection" onclick="clearSelection()">Clear Selection</button>
+        <input id="add" type="button" value="Submit">
+    </div>
+
+    <!-- Display ranking of videos based on priority -->
+    <div id="ranking-display">
+        <h2>Priority Ranking</h2>
+        <div id="ranking-list"></div>
+    </div>
+
+    <script>
+        const apiKey = 'AIzaSyC1XMRCkSRnNf-XnWvYgJZUTLaARwFeO68';  // Replace with your YouTube API key
+        let selectedVideos = [];
+
+        // Event listener for search form submission
+        document.getElementById('search-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const query = document.getElementById('search-query').value;
+            searchYouTube(query);
+        });
+
+        // Fetch and display search results from YouTube
+        function searchYouTube(query) {
+            const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&q=${encodeURIComponent(query)}&key=${apiKey}&maxResults=10`;
+            fetch(searchUrl)
+                .then(response => response.json())
+                .then(data => displayResults(data.items))
+                .catch(error => console.error('Error fetching YouTube data:', error));
+        }
+
+        // Display search results on the page
+        function displayResults(videos) {
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+            videos.forEach(video => {
+                const videoId = video.id.videoId;
+                const videoTitle = video.snippet.title;
+                const videoThumbnail = video.snippet.thumbnails.medium.url;
+                const videoElement = document.createElement('div');
+                videoElement.classList.add('video');
+                videoElement.innerHTML = `
+                    <img src="${videoThumbnail}" alt="${videoTitle}">
+                    <h3>${videoTitle}</h3>
+                    <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank">Watch on YouTube</a>
+                    <button class="select-button" onclick="selectVideo('${videoId}', '${videoTitle}', '${videoThumbnail}')">Select Video</button>
+                `;
+                resultsContainer.appendChild(videoElement);
+            });
+        }
+
+        // Add selected video to list and display selected videos
+        function selectVideo(videoId, videoTitle, videoThumbnail) {
+            const videoExists = selectedVideos.some(video => video.id === videoId);
+            if (!videoExists) {
+                fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${apiKey}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const viewCount = parseInt(data.items[0].statistics.viewCount);
+                        selectedVideos.push({ id: videoId, title: videoTitle, thumbnail: videoThumbnail, views: viewCount });
+                        displaySelectedVideos();
+                    })
+                    .catch(error => console.error('Error fetching video statistics:', error));
+            } else {
+                alert('This video is already selected!');
+            }
+        }
+
+        // Display selected videos with views
+        function displaySelectedVideos() {
+            const selectedList = document.getElementById('selected-list');
+            selectedList.innerHTML = '';
+            selectedVideos.sort((a, b) => b.views - a.views);
+            selectedVideos.forEach(video => {
+                const videoElement = document.createElement('div');
+                videoElement.classList.add('video');
+                videoElement.innerHTML = `
+                    <img src="${video.thumbnail}" alt="${video.title}">
+                    <h3>${video.title}</h3>
+                    <p>Views: ${video.views.toLocaleString()}</p>
+                    <a href="https://www.youtube.com/watch?v=${video.id}" target="_blank">Watch on YouTube</a>
+                `;
+                selectedList.appendChild(videoElement);
+            });
+        }
+
+        // Clear selection of videos
+        function clearSelection() {
+            selectedVideos = [];
+            displaySelectedVideos();
+            document.getElementById('ranking-list').innerHTML = '';
+        }
+
+        // Submit selected videos to the backend
+        document.getElementById('add').addEventListener('click', function () {
+            if (selectedVideos.length === 0) {
+                alert("Please select videos before submitting!");
+                return;
+            }
+
+            const videoLinks = selectedVideos.map(video => `https://www.youtube.com/watch?v=${video.id}`);
+            fetch('/submit_videos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ video_links: videoLinks })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Links successfully sent to the backend:", data);
+                if (data.success) {
+                    displayRanking(data.ranking);
+                }
+            })
+            .catch(error => console.error('Error submitting videos:', error));
+        });
+
+        // Display priority ranking returned from backend
+        function displayRanking(ranking) {
+            const rankingList = document.getElementById('ranking-list');
+            rankingList.innerHTML = '';  // Clear previous ranking
+            ranking.forEach((item, index) => {
+                const rankItem = document.createElement('div');
+                rankItem.classList.add('ranked-video');
+                rankItem.innerHTML = `
+                    <p><strong>Rank ${index + 1}:</strong> ${item.title}</p>
+                    <iframe width="100%" height="200" src="https://www.youtube.com/embed/${item.videoId}" 
+                        title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; 
+                        clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                    </iframe>
+                `;
+                rankingList.appendChild(rankItem);
+            });
+        }
+    </script>
+</body>
+</html>
