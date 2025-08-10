@@ -92,3 +92,5 @@ We welcome contributions from the community to enhance the system's capabilities
 > [!NOTE]
 > The recommendations and insights provided in this project are based on Natural Language Processing (NLP) analysis and may not be infallible.
 
+![WhatsApp Image 2025-08-10 at 13 39 26_05a12de6](https://github.com/user-attachments/assets/a86548eb-b660-4540-9dbc-e80d80af7b9e)
+
