@@ -1,0 +1,35 @@
+(C:\Users\Vineeth\Desktop\SVRE_P1\svre-env) C:\Users\Vineeth\Desktop\SVRE_P1>python demo.py                                                         
+Some weights of DistilBertForSequenceClassification were not initialized from the model checkpoint at distilbert-base-uncased and are newly initialized: ['classifier.bias', 'classifier.weight', 'pre_classifier.bias', 'pre_classifier.weight']
+You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
+cuda
+✅ Found existing processed CSV at C:/Users/Vineeth/Desktop/SVRE_P1/data/processed/all_comments_combined.csv. Skipping preprocessing.
+Starting model training...
+Epoch 1/3, Training Loss: 0.1123
+Validation Accuracy: 0.9843
+Epoch 2/3, Training Loss: 0.0488
+Validation Accuracy: 0.9868
+Epoch 3/3, Training Loss: 0.0332
+Validation Accuracy: 0.9861
+Model saved to C:/Users/Vineeth/Desktop/SVRE_P1/models/distillbert
+✅ Model training complete.
+
+
+
+
+## COnfidence levels of each prediction label based on confidence course either from the training dataset or something from the model.
+API_KEY=AIzaSyCoz9NrmBu5mFRm_-qD4XoTFaqu7AGvGeU
+
+YOUTUBE_API_KEY = "AIzaSyCoz9NrmBu5mFRm_-qD4XoTFaqu7AGvGeU"  # Replace with your key
+VIDEO_URLS = [
+    "https://www.youtube.com/watch?v=liBWJp2OfUU&list=PLXj4XH7LcRfDlQklXu3Hrtru-bm2dJ9Df&index=3",
+    "https://www.youtube.com/watch?v=-0_5ZkERRMg",
+    "https://www.youtube.com/watch?v=wXsgJPnr1nQ&list=PLLOxZwkBK52BCOXC7wpI_U81W_eklMFE3",
+    "https://www.youtube.com/watch?v=gLptmcuCx6Q",
+    "https://www.youtube.com/watch?v=FYvTNBB5bJA"
+]
+
+https://www.youtube.com/watch?v=liBWJp2OfUU&list=PLXj4XH7LcRfDlQklXu3Hrtru-bm2dJ9Df&index=3
+https://www.youtube.com/watch?v=-0_5ZkERRMg
+https://www.youtube.com/watch?v=wXsgJPnr1nQ&list=PLLOxZwkBK52BCOXC7wpI_U81W_eklMFE3
+https://www.youtube.com/watch?v=gLptmcuCx6Q
+https://www.youtube.com/watch?v=FYvTNBB5bJA

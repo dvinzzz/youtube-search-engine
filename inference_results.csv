@@ -1,0 +1,11 @@
+text,pred_label,score
+"I really enjoyed the course, it was very helpful!",2,1
+The instructor explained the concepts clearly and effectively.,2,1
+This learning platform has excellent resources and support.,2,1
+I'm extremely satisfied with the teaching quality.,1,0
+Great course! I learned a lot and feel confident.,2,1
+The course content was confusing and poorly organized.,0,-1
+I'm disappointed with the lack of clarity in the explanations.,1,0
+"The course was okay, nothing special but useful.",1,0
+The assignments were manageable and not too difficult.,1,0
+"The material was fine, but could use more examples.",1,0

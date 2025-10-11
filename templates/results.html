@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Results - Video Ranking</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🎬 Video Ranking Results</h1>
+    <a href="{{ url_for('index') }}" class="back-btn">← Analyze More Videos</a>
+    <div class="cards">
+      {% for video in results %}
+      <div class="card {% if video.score is not none %}{% if loop.index == 1 %}top{% endif %}{% endif %}">
+        <h2>{{ loop.index }}. <a href="{{ video.url }}" target="_blank">{{ video.title }}</a></h2>
+        {% if video.score is not none %}
+          <p><strong>Score:</strong> {{ video.score }}</p>
+          <p><strong>Confidence:</strong> {{ video.confidence }}%</p>
+        {% else %}
+          <p class="error">⚠ Error fetching video</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</body>
+</html>

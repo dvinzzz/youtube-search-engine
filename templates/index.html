@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Video Sentiment Ranking</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>YouTube Video Sentiment Analyzer 🎯</h1>
+    <p>Enter YouTube video URLs (one per line) to rank videos based on comment sentiment.</p>
+    <form method="POST">
+      <textarea name="video_urls" placeholder="Paste YouTube URLs here..." required></textarea>
+      <button type="submit">Analyze & Rank</button>
+    </form>
+  </div>
+</body>
+</html>
