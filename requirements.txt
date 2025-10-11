@@ -1,0 +1,8 @@
+flask==2.3.0
+pandas==1.5.3
+torch==2.5.1
+transformers==4.30.0
+google-api-python-client==2.184.0
+vaderSentiment==3.3.2
+numpy==1.24.3
+requests==2.31.0
